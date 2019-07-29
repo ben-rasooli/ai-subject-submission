@@ -1,8 +1,9 @@
 #pragma once
-
-#include "Game.h"
+#include "Application.h"
 #include "Renderer2D.h"
-
+#include "Game.h"
+#include "Font.h"
+#include "Input.h"
 
 class Game2D : public aie::Game
 {

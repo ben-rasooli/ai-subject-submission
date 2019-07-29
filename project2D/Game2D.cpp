@@ -1,10 +1,5 @@
 #include "Game2D.h"
 
-#include "Application.h"
-#include "Texture.h"
-#include "Font.h"
-#include "Input.h"
-
 Game2D::Game2D(const char* title, int width, int height, bool fullscreen) : Game(title, width, height, fullscreen)
 {
 	// Initalise the 2D renderer.
