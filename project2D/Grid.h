@@ -29,7 +29,6 @@ private:
 	Path* _path;
 
 	void populateNodes();
-	void addObsticles();
 
 	// This is used for ToString() method, so we can see the type
 	// of the node instead of just a number
