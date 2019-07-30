@@ -4,6 +4,7 @@
 #include "Game.h"
 #include "Font.h"
 #include "Input.h"
+#include "Level.h"
 
 class Game2D : public aie::Game
 {
@@ -17,4 +18,5 @@ public:
 protected:
 	aie::Renderer2D*	m_2dRenderer;
 	aie::Font*			m_font;
+	Level* _level;
 };

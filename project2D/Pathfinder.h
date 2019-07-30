@@ -15,8 +15,8 @@ public:
 	Returns a path from a GridNode to another one containing
 	all the connecting GridNodes in between.
 
-	@param from: origin GridNode
-	@param from: destination GridNode
+	@param from: origin GridNode Id
+	@param from: destination GridNode Id
 	------------------------------------------------------*/
 	Path* FindPath(string from, string to);
 

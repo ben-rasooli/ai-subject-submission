@@ -9,11 +9,13 @@ Game2D::Game2D(const char* title, int width, int height, bool fullscreen) : Game
 	m_font = new aie::Font("./font/consolas.ttf", 18);
 
 	// Create a player object.
+	_level = new Level();
 }
 
 Game2D::~Game2D()
 {
 	// Delete player.
+	delete _level;
 
 	// Deleted the textures.
 	delete m_font;
@@ -49,6 +51,7 @@ void Game2D::Draw()
 	m_2dRenderer->Begin();
 
 	// Draw the player.
+	_level->Draw(m_2dRenderer);
 
 	// Demonstrate animation.
 	float animSpeed = 10.0f;

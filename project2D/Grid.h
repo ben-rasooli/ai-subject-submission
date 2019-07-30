@@ -5,6 +5,12 @@
 #include "Path.h"
 #include "Settings.h"
 #include "Vector2.h"
+#include "include/rapidjson/document.h"
+#include "include/rapidjson/filereadstream.h"
+#include <cstdio>
+
+using namespace std;
+using namespace rapidjson;
 
 class Grid
 {
@@ -23,6 +29,7 @@ private:
 	Path* _path;
 
 	void populateNodes();
+	void addObsticles();
 
 	// This is used for ToString() method, so we can see the type
 	// of the node instead of just a number

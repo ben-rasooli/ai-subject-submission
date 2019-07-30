@@ -1,7 +1,11 @@
 #pragma once
+#include <iostream>
 #include "Renderer2D.h"
 #include "GameObject.h"
 #include "CollisionManager.h"
+#include "Grid.h"
+#include "Path.h"
+#include "Pathfinder.h"
 #include "Hero.h"
 #include "FlyingRock.h"
 
@@ -10,10 +14,14 @@ class Level :
 {
 public:
 	Level();
+	~Level();
 
 	void Update(float deltaTime);
 	void Draw(aie::Renderer2D* renderer);
 
 private:
+	Grid* _grid;
+	Pathfinder* _pathfinder;
+	Hero* _hero;
 };
 

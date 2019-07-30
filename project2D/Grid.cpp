@@ -15,6 +15,9 @@ Grid::~Grid()
 
 		delete _nodes[i];
 	}
+
+	if (_path)
+		delete _path;
 }
 
 void Grid::Draw(aie::Renderer2D * renderer)
@@ -56,15 +59,82 @@ std::string Grid::ToString()
 		result << endl;
 	}
 
+
+	/*result << "{\"Nodes\":[";
+	for (int i = 0; i < _nodes.Count(); i++)
+	{
+		auto node = _nodes[i];
+		result << "{\"Id\":\"" << node->Id << "\",\"Type\":" << node->Type << ",\"Position\":[" << node->Position.x << "," << node->Position.y << "],";
+		result << "\"Neighbors\":[";
+		for (int ii = 0; ii < node->Neighbors.Count(); ii++)
+		{
+			result << "\"" << node->Neighbors[ii]->Node->Id << "\"";
+			if (ii != (node->Neighbors.Count() - 1))
+				result << ",";
+		}
+		result << "]}";
+		if (i != (_nodes.Count() - 1))
+			result << ",";
+	}
+
+	result << "]}";*/
+
 	return result.str();
 }
 
-
-
-// It creates all the nodes, then finds their neighbors, and finally
-// set the cost for each neighbor
+// It creates nodes using a JSON file called nodes.json placed at bin folder
 void Grid::populateNodes()
 {
+	FILE* fp = fopen("./nodes.json", "rb");
+	char readBuffer[65536];
+	FileReadStream is(fp, readBuffer, sizeof(readBuffer));
+	Document document;
+	document.ParseStream(is);
+	fclose(fp);
+
+	auto nodes = document["Nodes"].GetArray();
+
+	// 1. setup each cell
+	for (auto& nodeData : nodes)
+	{
+		Node* node = new Node();
+
+		// id
+		node->Id = nodeData["Id"].GetString();
+
+		// type
+		auto type = nodeData["Type"].GetInt();
+		node->Type = static_cast<NodeType>(type);
+
+		// position
+		auto position = nodeData["Position"].GetArray();
+		node->Position = Vector2(position[0].GetFloat(), position[1].GetFloat());
+
+		_nodes.PushBack(node);
+	}
+
+	// 2. setup neighbors for each cell
+	for (int i = 0; i < nodes.Size(); i++)
+	{
+		auto neighbors = nodes[i]["Neighbors"].GetArray();
+		for (int ii = 0; ii < neighbors.Size(); ii++)
+			_nodes[i]->Neighbors.PushBack(new NodeNeighbor{ _nodes.Find([=](Node* n) { return n->Id == neighbors[ii].GetString(); }) , 0 });
+	}
+
+	// 3. setup neighbors costs for each cell
+	for (int i = 0; i < _nodes.Count(); i++)
+	{
+		Node* node = _nodes[i];
+		for (int ii = 0; ii < node->Neighbors.Count(); ii++)
+		{
+			Node* neighborNode = node->Neighbors[ii]->Node;
+			int magnitude = (int)((neighborNode->Position - node->Position).magnitude());
+			node->Neighbors[ii]->Cost = magnitude;
+		}
+	}
+
+	/*
+
 	// setup initial cells
 	for (int y = 0; y < GRID_HEIGHT; y++)
 		for (int x = 0; x < GRID_WIDTH; x++)
@@ -214,6 +284,12 @@ void Grid::populateNodes()
 			node->Neighbors[ii]->Cost = magnitude;
 		}
 	}
+	*/
+}
+
+void Grid::addObsticles()
+{
+
 }
 
 string Grid::castNodeTypeToString(NodeType nodeType)
