@@ -46,15 +46,13 @@ void GameObject::Update(float deltaTime)
 
 void GameObject::Draw(aie::Renderer2D * renderer)
 {
+	renderer->SetRenderColour(0xFFFFFFFF);
+
 	if (_texture)
 		renderer->DrawSpriteTransformed3x3(_texture, _globalTransform);
 
 	for (int i = 0; i < _childList.Count(); i++)
 		_childList[i]->Draw(renderer);
-}
-
-void GameObject::OnCollision(GameObject * other)
-{
 }
 
 void GameObject::UpdateGlobalTransform()

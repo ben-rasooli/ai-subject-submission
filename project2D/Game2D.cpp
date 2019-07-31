@@ -27,6 +27,7 @@ Game2D::~Game2D()
 void Game2D::Update(float deltaTime)
 {
 	// Update the player.
+	_level->Update(deltaTime);
 
 	// Input example: Update the camera position using the arrow keys.
 	aie::Input* input = aie::Input::GetInstance();
@@ -52,16 +53,8 @@ void Game2D::Draw()
 
 	// Draw the player.
 	_level->Draw(m_2dRenderer);
-
-	// Demonstrate animation.
-	float animSpeed = 10.0f;
-	int frame = ((int)(time * animSpeed) % 6);
-	float size = 1.0f / 6.0f;
-	m_2dRenderer->SetUVRect(frame * size, 0.0f, size, 1.0f);
-	m_2dRenderer->SetUVRect(0.0f, 0.0f, 1.0f, 1.0f);
 	
 	// Draw some text.
-
 	m_2dRenderer->SetRenderColour(1.0f, 1.0f, 1.0f, 0.5f);
 	float windowHeight = (float)application->GetWindowHeight();
 	m_2dRenderer->DrawText2D(m_font, "Press ESC to quit!", 15.0f, windowHeight - 25.0f);

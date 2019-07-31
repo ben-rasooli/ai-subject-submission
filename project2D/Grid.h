@@ -19,14 +19,21 @@ public:
 	~Grid();
 
 	void Draw(aie::Renderer2D* renderer);
+	Vector2 GetARandomReachablePosition();
+
 	List<Node*>* Nodes() { return &_nodes; }
+
 	void ShowPath(Path* path);
 	void ClearPath();
-	std::string ToString();
+	
+	void ShowWanderingTarget(Vector2 position);
+
+	string ToString();
 
 private:
 	List<Node*> _nodes;
 	Path* _path;
+	Vector2 _wanderingTargetPosition;
 
 	void populateNodes();
 

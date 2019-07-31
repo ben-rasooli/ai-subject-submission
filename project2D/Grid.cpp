@@ -4,6 +4,7 @@ Grid::Grid()
 {
 	populateNodes();
 	_path = nullptr;
+	_wanderingTargetPosition = Vector2(-1, -1);
 }
 
 Grid::~Grid()
@@ -30,9 +31,39 @@ void Grid::Draw(aie::Renderer2D * renderer)
 			if (_path->Corners.HasValue(_nodes[i]->Position))
 				color = 0x333333ff;
 
+		if (_wanderingTargetPosition != Vector2(-1, -1))
+		{
+			auto nodePos = _nodes[i]->Position;
+			if(_wanderingTargetPosition == nodePos)
+				color = 0xe0563aff;
+		}
+
 		renderer->SetRenderColour(color);
 		renderer->DrawBox(_nodes[i]->Position.x + WindowDisplayOffset * 2, _nodes[i]->Position.y + WindowDisplayOffset, GRID_CELL_SIZE - 1, GRID_CELL_SIZE - 1);
 	}
+}
+
+Vector2 Grid::GetARandomReachablePosition()
+{
+	Vector2 result = Vector2();
+
+	// find reachable nodes
+	List<Node*> reachableNodes;
+
+	for (int i = 0; i < _nodes.Count(); i++)
+		if (_nodes[i]->Type == NodeType::Normal)
+			reachableNodes.PushBack(_nodes[i]);
+
+	// pick a random reachable node
+	auto randomNode = reachableNodes[rand() % reachableNodes.Count()];
+
+	result = randomNode->Position;
+
+	// apply screen offset
+	result.x += WindowDisplayOffset * 2;
+	result.y += WindowDisplayOffset;
+
+	return result;
 }
 
 void Grid::ShowPath(Path* path)
@@ -43,6 +74,13 @@ void Grid::ShowPath(Path* path)
 void Grid::ClearPath()
 {
 	_path = nullptr;
+}
+
+void Grid::ShowWanderingTarget(Vector2 position)
+{
+	_wanderingTargetPosition = position;
+	_wanderingTargetPosition.x -= WindowDisplayOffset * 2;
+	_wanderingTargetPosition.y -= WindowDisplayOffset;
 }
 
 std::string Grid::ToString()
