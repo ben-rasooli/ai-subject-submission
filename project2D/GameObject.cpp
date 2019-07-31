@@ -48,11 +48,15 @@ void GameObject::Draw(aie::Renderer2D * renderer)
 {
 	renderer->SetRenderColour(0xFFFFFFFF);
 
-	if (_texture)
+	if (_texture && _isActive)
 		renderer->DrawSpriteTransformed3x3(_texture, _globalTransform);
 
 	for (int i = 0; i < _childList.Count(); i++)
 		_childList[i]->Draw(renderer);
+}
+
+void GameObject::OnCollision(GameObject * other)
+{
 }
 
 void GameObject::UpdateGlobalTransform()
@@ -64,6 +68,11 @@ void GameObject::UpdateGlobalTransform()
 
 	for (int i = 0; i < _childList.Count(); i++)
 		_childList[i]->UpdateGlobalTransform();
+}
+
+void GameObject::SetActive(bool value)
+{
+	_isActive = value;
 }
 
 void GameObject::SetPosition(Vector2 pos)

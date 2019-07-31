@@ -86,5 +86,8 @@
     <ClInclude Include="FlyingRock.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="HeroSFM.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

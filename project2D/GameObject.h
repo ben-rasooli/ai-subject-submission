@@ -16,6 +16,7 @@ public:
 
 	void UpdateGlobalTransform();
 
+	void SetActive(bool value);
 	void SetPosition(Vector2 pos);
 	void SetPosition(float x, float y);
 	void SetRotation(float radians);
@@ -35,6 +36,7 @@ public:
 
 
 protected:
+	bool _isActive;
 	GameObject* _parent;
 	List<GameObject*> _childList;
 

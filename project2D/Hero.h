@@ -1,9 +1,18 @@
 #pragma once
 #include "GameObject.h"
 
-class Hero : public GameObject
+class Level;
+class HeroFSM;
+
+class Hero 
+	: public GameObject
 {
 public:
-	Hero();
+	Hero(HeroFSM* FSM);
+
+	void Update(float deltaTime);
+
+private:
+	HeroFSM* _FSM;
 };
 

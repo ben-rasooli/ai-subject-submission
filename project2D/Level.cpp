@@ -7,17 +7,23 @@ Level::Level()
 	_wanderingTarget = new GameObject();
 	_wanderingInterval = 2.0f;
 	_timer = _wanderingInterval;
+	//Path* path = _pathfinder->FindPath("1_1", "28_14");
+	//_grid->ShowPath(path);
+
+	Hero* _hero = new Hero(this);
+	_hero->SetParent(this);
 
 	_masterFlyingRock = new FlyingRock(90);
 	_masterFlyingRock->SetParent(this);
 	_masterFlyingRock->SetPosition(_grid->GetARandomReachablePosition());
 
-	for (int i = 0; i < 10; i++)
+	for (int i = 0; i < FlyingRocksCount; i++)
 	{
 		FlyingRock* flyingRock = new FlyingRock();
 		flyingRock->SetParent(this);
-		flyingRock->SetPosition(_grid->GetARandomReachablePosition());
 		flyingRock->SetSeekingTarget(_masterFlyingRock);
+		flyingRock->SetPosition(_grid->GetARandomReachablePosition());
+		flyingRock->SetActive(false);
 		_slaveFlyingRocks.PushBack(flyingRock);
 	}
 }
@@ -49,6 +55,14 @@ void Level::Draw(aie::Renderer2D * renderer)
 	_grid->Draw(renderer);
 	GameObject::Draw(renderer);
 	CollisionManager::I()->Draw(renderer);
+}
+
+void Level::InstanciateRocks()
+{
+	_masterFlyingRock->SetPosition(_grid->GetARandomReachablePosition());
+	
+	for (int i = 0; i < _slaveFlyingRocks.Count(); i++)
+		_slaveFlyingRocks[i]->SetPosition(_grid->GetARandomReachablePosition());
 }
 
 void Level::setWanderingTarget()

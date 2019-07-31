@@ -1,5 +1,6 @@
 #pragma once
 #include "GameObject.h"
+#include "CollisionManager.h"
 
 using namespace std;
 
@@ -18,5 +19,7 @@ private:
 	float _speed;
 	Vector2 _velocity;
 	GameObject* _target;
+
+	void init();
 };
 

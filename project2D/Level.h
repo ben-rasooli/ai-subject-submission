@@ -19,6 +19,9 @@ public:
 	void Update(float deltaTime);
 	void Draw(aie::Renderer2D* renderer);
 
+	int FlyingRocksCount = 3;
+	void InstanciateRocks();
+
 private:
 	Grid* _grid;
 	Pathfinder* _pathfinder;
