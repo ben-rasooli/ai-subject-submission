@@ -1,7 +1,11 @@
 #pragma once
+#include "Texture.h"
+#include "Renderer2D.h"
 #include "Matrix3.h"
 #include "List.h"
 #include "Collider.h"
+
+using namespace std;
 
 class GameObject
 {
@@ -28,6 +32,8 @@ public:
 	void SetParent(GameObject* parent);
 	void AddChild(GameObject* child);
 
+	string GetType() { return _type; }
+	bool GetActive() { return _isActive; }
 	Vector2 GetPosition();
 	float GetRotation();
 	Vector2 GetScale();
@@ -36,6 +42,7 @@ public:
 
 
 protected:
+	string _type;
 	bool _isActive;
 	GameObject* _parent;
 	List<GameObject*> _childList;

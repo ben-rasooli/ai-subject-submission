@@ -3,6 +3,7 @@
 FlyingRock::FlyingRock()
 	: GameObject("slave_rock.png")
 {
+	_type = "SlaveFlyingRock";
 	_speed = rand() % 60 + 30;
 	init();
 }
@@ -10,6 +11,7 @@ FlyingRock::FlyingRock()
 FlyingRock::FlyingRock(float speed)
 	: GameObject("master_rock.png")
 {
+	_type = "MasterFlyingRock";
 	_speed = speed;
 	init();
 }

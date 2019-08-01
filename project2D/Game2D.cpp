@@ -58,6 +58,7 @@ void Game2D::Draw()
 	m_2dRenderer->SetRenderColour(1.0f, 1.0f, 1.0f, 0.5f);
 	float windowHeight = (float)application->GetWindowHeight();
 	m_2dRenderer->DrawText2D(m_font, "Press ESC to quit!", 15.0f, windowHeight - 25.0f);
+	m_2dRenderer->DrawText2D(m_font, "Press Space when there is no rock's flying around", 15.0f, windowHeight - 50.0f);
 
 	// Done drawing sprites. Must be called at the end of the Draw().
 	m_2dRenderer->End();

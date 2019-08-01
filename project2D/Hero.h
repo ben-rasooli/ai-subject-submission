@@ -1,18 +1,31 @@
 #pragma once
 #include "GameObject.h"
+#include "HeroSFM.h"
+#include "Grid.h"
+#include "Path.h"
+#include "Pathfinder.h"
 
 class Level;
-class HeroFSM;
 
 class Hero 
 	: public GameObject
 {
 public:
-	Hero(HeroFSM* FSM);
+	Hero(HeroFSM* FSM, Level* level, Grid* grid);
+	~Hero();
 
 	void Update(float deltaTime);
+	void OnCollision(GameObject* other);
+
+	void SeekASlaveFlyingRock();
+	void SeekMasterFlyingRock();
 
 private:
 	HeroFSM* _FSM;
+	Level* _level;
+	Grid* _grid;
+	Path* _path;
+	Pathfinder* _pathfinder;
+	GameObject* _target;
 };
 

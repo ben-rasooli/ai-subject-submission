@@ -1,9 +1,8 @@
 #include "GameObject.h"
-#include "Texture.h"
-#include "Renderer2D.h"
 
 GameObject::GameObject()
 {
+	_type = "";
 	_texture = nullptr;
 	_parent = nullptr;
 	_collider = nullptr;
@@ -11,6 +10,7 @@ GameObject::GameObject()
 
 GameObject::GameObject(const char * textureName)
 {
+	_type = "";
 	_texture = new aie::Texture(("./textures/" + std::string(textureName)).c_str());
 	_parent = nullptr;
 	_collider = nullptr;

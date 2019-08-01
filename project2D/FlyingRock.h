@@ -13,7 +13,6 @@ public:
 	void SetSeekingTarget(GameObject* target);
 
 	void Update(float deltaTime);
-	//void OnCollision(GameObject* other);
 
 private:
 	float _speed;

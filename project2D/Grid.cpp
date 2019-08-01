@@ -16,9 +16,6 @@ Grid::~Grid()
 
 		delete _nodes[i];
 	}
-
-	if (_path)
-		delete _path;
 }
 
 void Grid::Draw(aie::Renderer2D * renderer)

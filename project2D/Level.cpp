@@ -3,21 +3,48 @@
 Level::Level()
 {
 	_grid = new Grid();
-	_pathfinder = new Pathfinder(_grid->Nodes());
 	_wanderingTarget = new GameObject();
 	_wanderingInterval = 2.0f;
 	_timer = _wanderingInterval;
-	//Path* path = _pathfinder->FindPath("1_1", "28_14");
-	//_grid->ShowPath(path);
+	_slaveRocksCount = 4;
 
-	Hero* _hero = new Hero(this);
+	_instanciateRocks = [=]() {
+		_masterFlyingRock->SetPosition(_grid->GetARandomReachablePosition());
+		_masterFlyingRock->SetActive(true);
+
+		for (int i = 0; i < _slaveFlyingRocks.Count(); i++)
+		{
+			_slaveFlyingRocks[i]->SetPosition(_grid->GetARandomReachablePosition());
+			_slaveFlyingRocks[i]->SetActive(true);
+		}
+	};
+
+	_getFlyingRocksCount = [=]() {
+		int result = 0;
+
+		for (int i = 0; i < _slaveFlyingRocks.Count(); i++)
+			if (_slaveFlyingRocks[i]->GetActive())
+				result++;
+
+		if (_masterFlyingRock->GetActive())
+			result++;
+
+		return result;
+	};
+	
+
+	HeroFSM* heroFSM = new HeroFSM(_hero, &_instanciateRocks, &_getFlyingRocksCount);
+
+	Hero* _hero = new Hero(heroFSM, this, _grid);
 	_hero->SetParent(this);
+	_hero->SetPosition(_grid->GetARandomReachablePosition());
 
 	_masterFlyingRock = new FlyingRock(90);
 	_masterFlyingRock->SetParent(this);
 	_masterFlyingRock->SetPosition(_grid->GetARandomReachablePosition());
+	_masterFlyingRock->SetActive(false);
 
-	for (int i = 0; i < FlyingRocksCount; i++)
+	for (int i = 0; i < _slaveRocksCount; i++)
 	{
 		FlyingRock* flyingRock = new FlyingRock();
 		flyingRock->SetParent(this);
@@ -31,7 +58,6 @@ Level::Level()
 Level::~Level()
 {
 	delete _grid;
-	delete _pathfinder;
 	delete _wanderingTarget;
 }
 
@@ -55,14 +81,6 @@ void Level::Draw(aie::Renderer2D * renderer)
 	_grid->Draw(renderer);
 	GameObject::Draw(renderer);
 	CollisionManager::I()->Draw(renderer);
-}
-
-void Level::InstanciateRocks()
-{
-	_masterFlyingRock->SetPosition(_grid->GetARandomReachablePosition());
-	
-	for (int i = 0; i < _slaveFlyingRocks.Count(); i++)
-		_slaveFlyingRocks[i]->SetPosition(_grid->GetARandomReachablePosition());
 }
 
 void Level::setWanderingTarget()

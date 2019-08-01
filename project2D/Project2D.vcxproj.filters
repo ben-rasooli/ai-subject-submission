@@ -45,6 +45,9 @@
     <ClCompile Include="FlyingRock.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="HeroFSM.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game2D.h">
@@ -87,6 +90,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="HeroSFM.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HeroStates.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

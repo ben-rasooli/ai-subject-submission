@@ -18,7 +18,7 @@ public:
 	@param from: origin GridNode Id
 	@param from: destination GridNode Id
 	------------------------------------------------------*/
-	Path* FindPath(string from, string to);
+	void FindPath(string from, string to, Path* path);
 
 private:
 	List<Node*>* _nodes;;

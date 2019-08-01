@@ -11,9 +11,9 @@ Pathfinder::~Pathfinder()
 {
 }
 
-Path* Pathfinder::FindPath(string from, string to)
+void Pathfinder::FindPath(string from, string to, Path* path)
 {
-	Path* path = new Path();
+	path->Corners.Clear();
 	Node* origin = _nodes->Find([from](auto node) { return node->Id == from; });
 	Node* destination = _nodes->Find([to](auto node) { return node->Id == to; });
 
@@ -66,7 +66,8 @@ Path* Pathfinder::FindPath(string from, string to)
 		}
 	}
 
-	return path;
+	_openSet.Clear();
+	_closedSet.Clear();
 }
 
 int Pathfinder::calculateHCost(Node* from, Node* to)
