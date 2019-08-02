@@ -7,7 +7,7 @@ HeroFSM::HeroFSM(Hero* hero, function<void()>* onSpaceKeyPressed, function<int()
 {
 	_states.PushBack(new Idle(this, onSpaceKeyPressed));
 	_states.PushBack(new SlaveRockCollecting(this, getFlyingRocksCount, hero));
-	_states.PushBack(new MasterRockCollecting(this, getFlyingRocksCount));
+	_states.PushBack(new MasterRockCollecting(this, getFlyingRocksCount, hero));
 
 	ChangeState(0);
 }

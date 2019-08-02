@@ -17,8 +17,9 @@ public:
 	void Update(float deltaTime);
 	void OnCollision(GameObject* other);
 
-	void SeekASlaveFlyingRock();
+	void SeekSlaveFlyingRock();
 	void SeekMasterFlyingRock();
+	void SeekNothing();
 
 private:
 	HeroFSM* _FSM;

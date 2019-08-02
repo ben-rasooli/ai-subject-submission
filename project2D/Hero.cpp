@@ -36,8 +36,19 @@ void Hero::OnCollision(GameObject * other)
 	_FSM->OnCollision(other);
 }
 
-void Hero::SetSeekingTarget(GameObject * target)
+void Hero::SeekSlaveFlyingRock()
 {
-	_target = target;
+	_target = _level->GetSlaveFlyingRock();
 }
+
+void Hero::SeekMasterFlyingRock()
+{
+	_target = _level->GetMasterFlyingRock();
+}
+
+void Hero::SeekNothing()
+{
+	_target = nullptr;
+}
+
 

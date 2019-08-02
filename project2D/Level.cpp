@@ -83,6 +83,20 @@ void Level::Draw(aie::Renderer2D * renderer)
 	CollisionManager::I()->Draw(renderer);
 }
 
+GameObject * Level::GetSlaveFlyingRock()
+{
+	for (int i = 0; i < _slaveFlyingRocks.Count(); i++)
+		if (_slaveFlyingRocks[i]->GetActive())
+			return _slaveFlyingRocks[i];
+
+	return nullptr;
+}
+
+GameObject * Level::GetMasterFlyingRock()
+{
+	return _masterFlyingRock;
+}
+
 void Level::setWanderingTarget()
 {
 	_wanderingTarget->SetPosition(_grid->GetARandomReachablePosition());

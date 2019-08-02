@@ -19,7 +19,7 @@ public:
 	void Update(float deltaTime);
 	void Draw(aie::Renderer2D* renderer);
 
-	GameObject* GetASlaveFlyingRock();
+	GameObject* GetSlaveFlyingRock();
 	GameObject* GetMasterFlyingRock();
 
 private:

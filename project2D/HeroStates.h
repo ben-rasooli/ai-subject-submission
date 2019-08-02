@@ -2,6 +2,7 @@
 #include "GameObject.h"
 #include "Renderer2D.h"
 #include "Font.h"
+#include "Hero.h"
 
 class IState
 {
@@ -31,7 +32,7 @@ public:
 		}
 	}
 
-	void OnCollision(GameObject* other){}
+	void OnCollision(GameObject* other) {}
 
 private:
 	HeroFSM* _FSM;
@@ -51,19 +52,20 @@ public:
 		_hero = hero;
 	}
 
-	void Update()
-	{
-		if ((*_getFlyingRocksCount)() == 1)
-			_FSM->ChangeState(2);
-	}
+	void Update() {}
 
 	void OnCollision(GameObject* other)
 	{
 		if (other->GetType() == "SlaveFlyingRock")
-		{
 			other->SetActive(false);
-			_hero
+
+		if ((*_getFlyingRocksCount)() == 1)
+		{
+			_hero->SeekMasterFlyingRock();
+			_FSM->ChangeState(2);
 		}
+		else
+			_hero->SeekSlaveFlyingRock();
 	}
 
 private:
@@ -77,25 +79,27 @@ class MasterRockCollecting
 	: public  IState
 {
 public:
-	MasterRockCollecting(HeroFSM* FSM, function <int()>* getFlyingRocksCount)
+	MasterRockCollecting(HeroFSM* FSM, function <int()>* getFlyingRocksCount, Hero* hero)
 	{
 		_FSM = FSM;
 		_getFlyingRocksCount = getFlyingRocksCount;
+		_hero = hero;
 	}
 
-	void Update()
-	{
-		if ((*_getFlyingRocksCount)() == 0)
-			_FSM->ChangeState(0);
-	}
+	void Update() {}
 
 	void OnCollision(GameObject* other)
 	{
 		if (other->GetType() == "MasterFlyingRock")
+		{
 			other->SetActive(false);
+			_hero->SeekNothing();
+			_FSM->ChangeState(0);
+		}
 	}
 
 private:
 	HeroFSM* _FSM;
 	function <int()>* _getFlyingRocksCount;
+	Hero* _hero;
 };
