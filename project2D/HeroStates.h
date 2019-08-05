@@ -2,7 +2,11 @@
 #include "GameObject.h"
 #include "Renderer2D.h"
 #include "Font.h"
+#include "Level.h"
 #include "Hero.h"
+#include "Pathfinder.h"
+
+using namespace std;
 
 class IState
 {
@@ -28,6 +32,8 @@ public:
 		if (_input->WasKeyReleased(aie::INPUT_KEY_SPACE))
 		{
 			(*_onSpaceKeyPressed)();
+			_FSM->Target = _FSM->Level_->GetSlaveFlyingRock();
+			Vector2 pos = _FSM->Target->GetPosition();
 			_FSM->ChangeState(1);
 		}
 	}
@@ -45,14 +51,17 @@ class SlaveRockCollecting
 	: public  IState
 {
 public:
-	SlaveRockCollecting(HeroFSM* FSM, function <int()>* getFlyingRocksCount, Hero* hero)
+	SlaveRockCollecting(HeroFSM* FSM, function <int()>* getFlyingRocksCount)
 	{
 		_FSM = FSM;
 		_getFlyingRocksCount = getFlyingRocksCount;
-		_hero = hero;
 	}
 
-	void Update() {}
+	void Update()
+	{
+		_FSM->SetPath();
+		_FSM->Hero_->SetPath(_FSM->Path_);
+	}
 
 	void OnCollision(GameObject* other)
 	{
@@ -61,17 +70,16 @@ public:
 
 		if ((*_getFlyingRocksCount)() == 1)
 		{
-			_hero->SeekMasterFlyingRock();
+			_FSM->Target = _FSM->Level_->GetMasterFlyingRock();
 			_FSM->ChangeState(2);
 		}
 		else
-			_hero->SeekSlaveFlyingRock();
+			_FSM->Target = _FSM->Level_->GetSlaveFlyingRock();
 	}
 
 private:
 	HeroFSM* _FSM;
 	function <int()>* _getFlyingRocksCount;
-	Hero* _hero;
 };
 
 //-----------------------------MasterRockCollecting
@@ -79,21 +87,25 @@ class MasterRockCollecting
 	: public  IState
 {
 public:
-	MasterRockCollecting(HeroFSM* FSM, function <int()>* getFlyingRocksCount, Hero* hero)
+	MasterRockCollecting(HeroFSM* FSM, function <int()>* getFlyingRocksCount)
 	{
 		_FSM = FSM;
 		_getFlyingRocksCount = getFlyingRocksCount;
-		_hero = hero;
 	}
 
-	void Update() {}
+	void Update()
+	{
+		_FSM->SetPath();
+		_FSM->Hero_->SetPath(_FSM->Path_);
+	}
 
 	void OnCollision(GameObject* other)
 	{
 		if (other->GetType() == "MasterFlyingRock")
 		{
 			other->SetActive(false);
-			_hero->SeekNothing();
+			_FSM->Target = nullptr;
+			_FSM->Hero_->SetPath(nullptr);
 			_FSM->ChangeState(0);
 		}
 	}
@@ -101,5 +113,4 @@ public:
 private:
 	HeroFSM* _FSM;
 	function <int()>* _getFlyingRocksCount;
-	Hero* _hero;
 };

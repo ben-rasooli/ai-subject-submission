@@ -11,7 +11,6 @@ public:
 	static CollisionManager* I();
 
 	void Update(float deltaTime);
-	void Draw(aie::Renderer2D* renderer);
 
 	void AddGameObject(GameObject* gameObject, CollisionLayer layer);
 

@@ -16,7 +16,7 @@ public:
 	all the connecting GridNodes in between.
 
 	@param from: origin GridNode Id
-	@param from: destination GridNode Id
+	@param to: destination GridNode Id
 	------------------------------------------------------*/
 	void FindPath(string from, string to, Path* path);
 

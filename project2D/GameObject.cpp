@@ -39,9 +39,6 @@ void GameObject::Update(float deltaTime)
 {
 	for (int i = 0; i < _childList.Count(); i++)
 		_childList[i]->Update(deltaTime);
-
-	if (_collider)
-		_collider->SetPosition(GetPosition());
 }
 
 void GameObject::Draw(aie::Renderer2D * renderer)
@@ -78,11 +75,17 @@ void GameObject::SetActive(bool value)
 void GameObject::SetPosition(Vector2 pos)
 {
 	_localTransform.setPosition(pos);
+
+	if (_collider)
+		_collider->SetPosition(GetPosition());
 }
 
 void GameObject::SetPosition(float x, float y)
 {
 	_localTransform.setPosition(x, y);
+
+	if (_collider)
+		_collider->SetPosition(GetPosition());
 }
 
 void GameObject::SetRotation(float radians)

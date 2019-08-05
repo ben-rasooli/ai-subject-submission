@@ -8,6 +8,7 @@
 #include "Hero.h"
 #include "HeroSFM.h"
 #include "FlyingRock.h"
+#include "Pathfinder.h"
 
 class Level :
 	public GameObject
@@ -25,8 +26,9 @@ public:
 private:
 	Grid* _grid;
 	GameObject* _wanderingTarget;
-	float _wanderingInterval;
+	float _randomDestinationPickingInterval;
 	float _timer;
+	Pathfinder* _pathfinder;
 	Hero* _hero;
 	FlyingRock* _masterFlyingRock;
 	int _slaveRocksCount;

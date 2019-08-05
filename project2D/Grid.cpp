@@ -31,7 +31,7 @@ void Grid::Draw(aie::Renderer2D * renderer)
 		if (_wanderingTargetPosition != Vector2(-1, -1))
 		{
 			auto nodePos = _nodes[i]->Position;
-			if(_wanderingTargetPosition == nodePos)
+			if (_wanderingTargetPosition == nodePos)
 				color = 0xe0563aff;
 		}
 
@@ -63,6 +63,23 @@ Vector2 Grid::GetARandomReachablePosition()
 	return result;
 }
 
+string Grid::GetCellID(Vector2 worldPosition)
+{
+	string result = "0_0";
+
+	Vector2 positionOnGrid = GetPositionOnGrid(worldPosition);
+
+
+	for (int i = 0; i < _nodes.Count(); i++)
+		if (_nodes[i]->Position == positionOnGrid)
+		{
+			result = _nodes[i]->Id;
+			break;
+		}
+
+	return result;
+}
+
 void Grid::ShowPath(Path* path)
 {
 	_path = path;
@@ -71,6 +88,16 @@ void Grid::ShowPath(Path* path)
 void Grid::ClearPath()
 {
 	_path = nullptr;
+}
+
+Vector2 Grid::GetPositionOnScreen(Vector2 gridPosition)
+{
+	Vector2 result = Vector2();
+
+	result.x = gridPosition.x + WindowDisplayOffset * 2;
+	result.y = gridPosition.y + WindowDisplayOffset;
+
+	return result;
 }
 
 void Grid::ShowWanderingTarget(Vector2 position)
@@ -147,6 +174,24 @@ void Grid::populateNodes()
 			node->Neighbors[ii]->Cost = magnitude;
 		}
 	}
+}
+
+float roundNum(float number)
+{
+	int result = (int)number;
+	int rem = result % 10;
+	result = rem >= 5 ? (number - rem + 10) : (number - rem);
+	return (float)result;
+}
+
+Vector2 Grid::GetPositionOnGrid(Vector2 worldPosition)
+{
+	Vector2 result = Vector2();
+
+	result.x = roundNum(worldPosition.x - WindowDisplayOffset * 2);
+	result.y = roundNum(worldPosition.y - WindowDisplayOffset);
+
+	return result;
 }
 
 string Grid::castNodeTypeToString(NodeType nodeType)

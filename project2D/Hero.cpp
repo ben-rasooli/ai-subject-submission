@@ -1,54 +1,61 @@
 #include "Hero.h"
 #include "Level.h"
+#include <iostream>
 
-Hero::Hero(HeroFSM * FSM, Level* level, Grid* grid)
+Hero::Hero(Level* level, Grid* grid)
 	: GameObject("hero.png")
 {
 	_type = "Hero";
-	_FSM = FSM;
 	_level = level;
 	_grid = grid;
-	_path = new Path();
-	_pathfinder = new Pathfinder(_grid->Nodes());
-	_target = nullptr;
+	_path = nullptr;
+	_moveSpeed = 0.1f;
+	_timer = 0.0f;
+	_collider = new Collider(Vector2(10, 10));
+	CollisionManager::I()->AddGameObject(this, CollisionLayer::HERO);
 }
 
 Hero::~Hero()
 {
 	delete _FSM;
-	delete _path;
-	delete _pathfinder;
 }
 
 void Hero::Update(float deltaTime)
 {
 	_FSM->Update();
 
-	if (!_target)
-		return;
 
-	_pathfinder->FindPath("1_1", "28_14", _path);
-	_grid->ShowPath(_path);
+		if (_path)
+		{
+			_grid->ShowPath(_path);
+
+			// move hero toward target
+			if (_path->Corners.Count() >= 2)
+				if (_timer <= 0)
+				{
+ 					_timer = _moveSpeed;
+					Vector2 position = _grid->GetPositionOnScreen(_path->Corners[1]);
+					SetPosition(position);
+				}
+		}
+
+		_timer -= deltaTime;
 }
 
 void Hero::OnCollision(GameObject * other)
 {
+	cout << other->GetType() << endl;
 	_FSM->OnCollision(other);
 }
 
-void Hero::SeekSlaveFlyingRock()
+void Hero::SetFSM(HeroFSM * FSM)
 {
-	_target = _level->GetSlaveFlyingRock();
+	_FSM = FSM;
 }
 
-void Hero::SeekMasterFlyingRock()
+void Hero::SetPath(Path* path)
 {
-	_target = _level->GetMasterFlyingRock();
-}
-
-void Hero::SeekNothing()
-{
-	_target = nullptr;
+	_path = path;
 }
 
 

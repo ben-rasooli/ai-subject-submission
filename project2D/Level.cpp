@@ -4,9 +4,9 @@ Level::Level()
 {
 	_grid = new Grid();
 	_wanderingTarget = new GameObject();
-	_wanderingInterval = 2.0f;
-	_timer = _wanderingInterval;
-	_slaveRocksCount = 4;
+	_randomDestinationPickingInterval = 2.0f;
+	_timer = _randomDestinationPickingInterval;
+	_slaveRocksCount = 6;
 
 	_instanciateRocks = [=]() {
 		_masterFlyingRock->SetPosition(_grid->GetARandomReachablePosition());
@@ -31,13 +31,14 @@ Level::Level()
 
 		return result;
 	};
-	
 
-	HeroFSM* heroFSM = new HeroFSM(_hero, &_instanciateRocks, &_getFlyingRocksCount);
-
-	Hero* _hero = new Hero(heroFSM, this, _grid);
+	Hero* _hero = new Hero(this, _grid);
 	_hero->SetParent(this);
 	_hero->SetPosition(_grid->GetARandomReachablePosition());
+
+	_pathfinder = new Pathfinder(_grid->Nodes());
+	HeroFSM* heroFSM = new HeroFSM(this, _hero, _grid, _pathfinder, &_instanciateRocks, &_getFlyingRocksCount);
+	_hero->SetFSM(heroFSM);
 
 	_masterFlyingRock = new FlyingRock(90);
 	_masterFlyingRock->SetParent(this);
@@ -59,17 +60,18 @@ Level::~Level()
 {
 	delete _grid;
 	delete _wanderingTarget;
+	delete _pathfinder;
 }
 
 void Level::Update(float deltaTime)
 {
-	CollisionManager::I()->Update(deltaTime);
-	GameObject::Update(deltaTime);
 	UpdateGlobalTransform();
+	GameObject::Update(deltaTime);
+	CollisionManager::I()->Update(deltaTime);
 
 	if (_timer < 0)
 	{
-		_timer = _wanderingInterval;
+		_timer = _randomDestinationPickingInterval;
 		setWanderingTarget();
 	}
 	else
@@ -80,7 +82,6 @@ void Level::Draw(aie::Renderer2D * renderer)
 {
 	_grid->Draw(renderer);
 	GameObject::Draw(renderer);
-	CollisionManager::I()->Draw(renderer);
 }
 
 GameObject * Level::GetSlaveFlyingRock()
